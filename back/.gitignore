@@ -2,3 +2,8 @@
 /node_modules
 /.pnp
 .pnp.js
+
+# Environment Variables should NEVER be published
+.env
+
+nodemon.json
