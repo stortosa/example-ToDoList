@@ -1,19 +1,12 @@
-require('dotenv').config();
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
 const express = require('express');
 const app = express();
-// const favicon = require('serve-favicon');
-// const logger = require('morgan');
 const morgan = require('morgan');
-// const path = require('path');
-const cors = require("cors")
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const cors = require('cors');
 require('./db');
 
-const tasksRoutes = require('./routes/tasks.js');
-
-// const app_name = require('./package.json').name;
-// const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.')[0]}`);
+const taskRoutes = require('../routes/tasks.js');
 
 const whiteList = ['http://localhost:3000','http://localhost']
 const corsOptions = {
@@ -25,12 +18,9 @@ const corsOptions = {
 }
 app.use(cors(corsOptions));
 
-// Middleware setup:
 app.use(morgan('dev'));
-// app.use(logger('dev'));
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(bodyParser.json());
 app.use(cors({
   credentials: true,
   origin: ['http://localhost:3000']
@@ -46,23 +36,28 @@ app.use((req, res, next) => {
   next();
 })
 
-// Routes which should handle requests
-app.use('/tasks', tasksRoutes);
+// Routes which should handle requests:
+app.use('/tasks', taskRoutes);
 
-
-app.use((req, res, next) => {
+app.use((req, res, next)=>{
   const error = new Error('Not found');
-  error.status = 404;
+  error.status(404);
   next(error);
 })
 
-app.use((error, req, res, next) => {
+app.use((error, req, res, next)=>{
   res.status(error.status || 500);
   res.json({
     error: {
-      message: error.mesagge
+      message: error.message
     }
   })
 });
+
+// app.use((req, res, next)=>{
+//   res.status(200).json({
+//     message: 'It works'
+//   })
+// })
 
 module.exports = app;
