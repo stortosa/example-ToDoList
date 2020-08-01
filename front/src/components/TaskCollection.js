@@ -7,28 +7,72 @@ import TaskElement from './TaskElement';
 
 export default class TaskCollection extends Component {
   constructor() {
-    super();
-
-    this.state = {
-      newTaskString: "",
-      tasks: []
+    super()
+  }
+    state = {
+      task: {
+        description: "",
+        favourited: false,
+        done: false,
+        newTaskString: "",
+        tasks: []
+      }
     }
+
+  handleSubmit(event) {  // add tasks
+    event.preventDefault();
+
+    const { description, favourited, done } = this.state.task;
+
+    console.log(this.state);
+
+    axios.post('http://localhost:4000/tasks', {
+      description, favourited, done
+    })
+      .then(createdTask => {
+        let tasksClonedArray = []
+
+        createdTask = createdTask.data
+        tasksClonedArray.unshift(
+          new TaskElement(createdTask._id, createdTask.description, createdTask.timestamp, createdTask.favourited, createdTask.done)
+        )
+        this.setState({
+          ...this.state,
+          tasks: tasksClonedArray,
+          newTaskString: ""
+        })
+      })
   }
 
   componentDidMount() {
     axios
       .get('http://localhost:4000/tasks')
       .then(allTasks => {
-        allTasks = allTasks.data.map(task => {
+        // console.log(allTasks.data.tasks)
+        allTasks = allTasks.data.tasks.map(task => {
+          // console.log(task)
           return new TaskElement(
-            task._id, task.description, task.timestamp, taks.favourited, task.done
+            task._id, task.description, task.timestamp, task.favourited, task.done
           )
         })
         this.setState({
           ...this.state,
-          tasks: allTasks
+          tasks: allTasks,
         })
       })
+  }
+
+  handleInputChange(event) {
+    event.preventDefault(); // puede que borrar
+
+    // console.log(event.target.value)
+    const { name, value } = event.target;
+    this.setState({
+      ...this.state,
+      // tasks: allTasks,
+      [name]: value
+      // newTaskString: event.target.value
+    })
   }
 
   toggle(taskID, property) {
@@ -37,62 +81,41 @@ export default class TaskCollection extends Component {
     chosenTask[property] = !chosenTask[property]
 
     axios
-      .put(`http://localhost:4000/task/${taskID}`, {
+      .put(`http://localhost:4000/tasks/${taskID}`, {
         done: chosenTask.done,
         favourited: chosenTask.favourited
       })
       .then(updatedTaskInfo => {
-        console.log(updatedTaskInfo),
+        console.log(updatedTaskInfo)
 
-          this.setState({
-            ...this.state
-          })
-      })
-  }
-
-  updateNewTaskString(e) {
-    this.setState({
-      ...this.state,
-      newTaskString: e.target.value
-    })
-  }
-
-  addNewTask(e) {
-    if (e.key === 'Enter') {
-      axios.post('http://localhost:4000/task', {
-        "description": this.state.newTaskString
-      })
-        .then(createdTask => {
-          let tasksClonedArray = [...this.state.tasks]
-
-          createdTask = createdTask.data
-          tasksClonedArray.unshift(
-            new TaskElement(createdTask._id, createdTask.description, createdTask.timestamp, createdTask.favourited, createdTask.done)
-          )
-          this.setState({
-            ...this.state,
-            tasks: tasksClonedArray,
-            newTaskString: ""
-          })
+        this.setState({
+          ...this.state
         })
-    }
+      })
   }
 
   render() {
+    const { newTaskString } = this.state
     return (
-      <section>
-        <input type="text"
-          placeholder="add a new task"
-          className="add-new-task"
-          value={this.state.newTaskString}
-          onChange={this.updateNewTaskString(e)}
-          onKeyDown={this.addNewTask(e)}
-        />
-        <TaskList tasks={this.state.tasks}
-          toggleDone={(tasks) => this.toggle(task, "done")}
-          toggleFavourite={(tasks) => this.toggle(task, "favourite")}
-        ></TaskList>
-      </section>
+      <div>
+        <p>la tarea es: {newTaskString}</p>
+        <form onSubmit={this.handleSubmit}>
+          <p><input type="text"
+            placeholder="add a task"
+            value={this.state.description}
+            name="newTaskString"
+            onChange={event => this.handleInputChange(event)}
+
+          /></p>
+          {/* <p><button onKeyDown={event => this.handleSubmit(event)}>Send Task</button></p> */}
+          <TaskList tasks={this.state.tasks}
+            toggleDone={(tasks) => this.toggle(tasks, "done")}
+            toggleFavourite={(tasks) => this.toggle(tasks, "favourite")}
+          ></TaskList>
+          <input type="submit" value="Send Task" />
+        </form>
+
+      </div>
     )
   }
 }

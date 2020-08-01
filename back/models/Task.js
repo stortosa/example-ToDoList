@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const taskSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  description: { type: String },
+  description: String,
   favourited: { type: Boolean, default: false },
   done: { type: Boolean, default: false },
 },

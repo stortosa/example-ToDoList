@@ -2,21 +2,24 @@ import React, { Component } from 'react';
 import Task from './Task';
 import './TaskList.css';
 
-export default class TaskList extends Component {
-  render() {
-    return (
-      <ol className="task-list">
-        {
-          this.props.tasks.map(task =>
-            <Task
-              toggleDone={this.props.toggleDone}
-              toggleFavourite={this.props.toggleFavourite}
-              key={task._id}
-              {...task}
-            />
-          )
-        }
-      </ol>
-    )
-  }
+const TaskList = ({ tasks }) => {
+  console.log(tasks)
+
+  return (
+    <ol className="task-list">
+      {
+        tasks.map(task =>
+          <Task
+            task={task}
+            toggleDone={this.props.toggleDone}
+            toggleFavourite={this.props.toggleFavourite}
+            key={task._id}
+          // {...task}
+          />
+        )
+      }
+    </ol>
+  )
 }
+
+export default TaskList;

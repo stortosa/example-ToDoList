@@ -10,7 +10,7 @@
 
 .task .done {
   --dimensions: 31px;
-  background-image: url(./img/checkbox.png);
+  background-image: url('../img/checkbox.png');
   height: var(--dimensions);
   width: var(--dimensions);
   margin-right: 1.5rem;
