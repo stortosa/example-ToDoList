@@ -14,6 +14,7 @@ router.get('/', (req, res, next) => {
         tasks: docs.map(doc => {
           return {
             description: doc.description,
+            done: doc.done,
             _id: doc._id,
             request: {
               type: 'GET',
@@ -36,6 +37,7 @@ router.post('/', (req, res, next) => {
   const task = new Task({
     _id: new mongoose.Types.ObjectId(),
     description: req.body.description,
+    done: req.body.done
   });
   task
     .save()
@@ -45,6 +47,7 @@ router.post('/', (req, res, next) => {
         message: 'Created task succesfully',
         createdTask: {
           description: result.description,
+          done: result.done,
           _id: result._id,
           request: {
             type: 'POST',

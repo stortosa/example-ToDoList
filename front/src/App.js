@@ -1,31 +1,64 @@
 import React, { Component, Fragment } from 'react';
-// import TaskCollection from './components/TaskCollection';
 import AddTask from './components/AddTask';
-import TaskList from './components/TaskList';
+import axios from 'axios';
 
 class App extends Component {
   state = {
-    tasks: []
-  }
+    count: 0,
+    allTasks: [],
+    error: false
+  };
 
-  createTask(data) {
-    // console.log(data);
-    let tasks = [...this.state.tasks, data]
+  increment = () => {
     this.setState({
-      ...this.state,
-      tasks: tasks
+      count: this.state.count + 1
     })
   }
 
-  render() {
+  decrement = () => {
+    this.setState({
+      count: this.state.count - 1
+    })
+  }
 
+  handleChange = (e) => {
+
+    this.setState({
+      task: {
+        ...this.state.task,
+        [e.target.name]: e.target.value
+      }
+    })
+  }
+
+  componentDidMount() {
+    this.setState({
+      ...this.state,
+    });
+  }
+
+  toggle(taskID, property) {
+    let chosenTask = this.state.tasks.filter(task => task._id === taskID)[0]
+
+    chosenTask[property] = !chosenTask[property]
+
+    axios
+      .put(`http://localhost:4000/tasks/${taskID}`, {
+        done: chosenTask.done,
+      })
+      .then(updatedTaskInfo => {
+        console.log(updatedTaskInfo)
+
+        this.setState({
+          ...this.state
+        })
+      })
+  }
+
+  render() {
     return (
       <Fragment>
-        {/* <TaskCollection /> */}
-        <AddTask
-        createTask={this.createTask}
-        />
-        < TaskList tasks={this.state.tasks}/>
+        <AddTask />
       </Fragment>
     );
   }
