@@ -108,12 +108,28 @@ router.put('/:taskId', (req, res, next) => {
     });
 });
 
-// router.get('/tasks', (req, res, next) => {
-//   Task
-//     .find()
-//     .sort({ timestamp: -1})
-//     .then(allTasks => res.json(allTasks))
-//     .catch(e => console.log(e))
-// });
+router.delete('/:taskId', (req, res, next) => {
+  const id = req.params.taskId;
+  Task.deleteMany({ _id: id })
+    .exec()
+    .then(result => {
+      console.log(result)
+      res.status(200).json({
+        message: 'Task deleted',
+        request: {
+          type: 'POST',
+          url: 'http://localhost:4000/tasks',
+          body: { description: 'String' }
+        }
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        error: err
+      });
+    });
+
+});
 
 module.exports = router;

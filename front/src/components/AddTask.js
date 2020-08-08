@@ -7,45 +7,25 @@ class AddTask extends Component {
   state = {
     description: '',
     error: false,
-    allTasks: []          // newAdd
+    allTasks: [],          // newAdd
+    count: null
   };
 
-  // sent form data:
-  handleSubmit = (e) => {
-    e.preventDefault();
-
-    // extracts values from this.state:
-    const description = this.state.description;
-
-    //validate all fields aren´t empty:
-    if (description === '') {
-      this.setState({
-        error: true
-      });
-      //stop execution
-      return;
-    }
-
-    axios.post('http://localhost:4000/tasks', {  //done
-      description: description
+  increment = () => {
+    this.setState({
+      count: this.state.allTasks.length + 1
     })
-      .then(createdTask => {
+  }
 
-        let cloneAllTasks = [...this.state.allTasks];     //newAdd
+  decrement = () => {
+    this.setState({
+      count: this.state.allTasks.length - 1
+    })
+  }
 
-        // console.log(createdTask.data.createdTask);
-        cloneAllTasks.push(createdTask)              // newAdd
+  initialCount = () => {
 
-        this.setState({
-          ...this.state,
-          allTasks: cloneAllTasks,                    // newAdd
-          description: '',
-        });
-      })
-      .catch(error => console.log(error))
-
-    this.getAllTasks();
-  };
+  }
 
   getAllTasks = () => {                       // newAdd
     axios
@@ -59,12 +39,52 @@ class AddTask extends Component {
       })
   }
 
+
   componentDidMount() {
     this.setState({
       ...this.state,
     })
     this.getAllTasks();
+    this.count = this.state.allTasks.length;
   };
+
+  // sent form data:
+  handleSubmit = (e) => {
+    e.preventDefault();
+
+    // extracts values from this.state:
+    const description = this.state.description;
+
+    //validate all fields aren´t empty:
+    if (description === '') {
+      this.setState({
+        error: true,
+        count: this.state.allTasks.length
+      });
+      //stop execution
+      return;
+    }
+
+    axios.post('http://localhost:4000/tasks', {  //done
+      description                                //description
+    })
+      .then(createdTask => {
+
+        let cloneAllTasks = [...this.state.allTasks];
+
+        // console.log(createdTask.data.createdTask);
+        // cloneAllTasks.push(createdTask)              // newAdd Duplica el result
+
+        this.setState({
+          ...this.state,
+          allTasks: cloneAllTasks,
+        });
+      })
+      .catch(error => console.log(error))
+
+    this.getAllTasks();
+  };
+
 
   handleChange = (e) => {
     this.setState({
@@ -82,23 +102,47 @@ class AddTask extends Component {
   //   }
   // }
 
-  // next steps:
-  // deleteGoal = (e, goal_id) => {
-  //   e.preventDefault();
-  //   this.service.removeGoal(goal_id)
-  //     .then(x => {
-  //       // this.setState({
-  //       //   ...this.state,
-  //       // })
-  //     })
-  //   this.getUserGoals()
-  // }
+  toggle(task_id) {
+    let chosenTask = this.state.allTasks.filter(task => task._id === task_id)[0];
+    chosenTask.done = !chosenTask.done
+
+    // if (!chosenTask.done) {
+    //   this.setState({ done: true });
+    // } else {
+    //   this.setState({ done: false })
+    // }
+    axios
+      .put(`http://localhost:4000/tasks/${task_id}`, {
+        done: chosenTask.done,
+      })
+      .then(updatedTaskInfo => {
+        console.log(updatedTaskInfo)
+
+        this.setState({
+          ...this.state
+        })
+      })
+  }
+
+  deleteTask = (task_id) => {
+    console.log("Eliminando........", task_id)
+    axios.delete(`http://localhost:4000/tasks/${task_id}`)
+      .then(res => {
+        console.log(res);
+        this.setState({
+          ...this.state,
+        });
+      });
+    this.getAllTasks();
+    this.decrement();
+  }
 
 
   render() {
 
     const { error } = this.state;
     const { allTasks } = this.state;
+    const { count } = this.state;
 
     return (
       <Fragment>
@@ -117,15 +161,18 @@ class AddTask extends Component {
             <input
               type="submit"
               value="Add Task"
-              onClick={this.handleSubmit}
+              onClick={this.handleSubmit && this.increment}
             />
           </form>
         </div>
+        <h3>Task to do: {count}</h3>
         <ul>
-          {allTasks.map((task) => (
+          {allTasks.map((task, idx) => (
             <Task
-              key={task._id}
+              key={idx}
+              onDelete={() => this.deleteTask(task._id)}
               task={task}
+              toggleDone={(task) => this.toggle(task, "done")}
             />
           ))}
         </ul>
