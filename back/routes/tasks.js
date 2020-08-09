@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 router.get('/', (req, res, next) => {
   Task.find()
-    .select('description _id')
+    .select('description _id done')
     .populate('task', 'description')
     .exec()
     .then(docs => {

@@ -9,7 +9,6 @@ class Task extends Component {
     allTasks: [],
   };
 
-
   componentDidMount() {
     this.setState({
       ...this.state,
@@ -17,7 +16,7 @@ class Task extends Component {
   };
 
   render() {
-    // console.log(this.props.task.done)
+    // console.log(this.props.task.done) 
 
     return (
       <div className="task">

@@ -6,13 +6,11 @@ class App extends Component {
     allTasks: [],
   };
 
-
   componentDidMount() {
     this.setState({
       ...this.state,
     });
-  }
-
+  };
 
   render() {
 
