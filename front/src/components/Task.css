@@ -14,34 +14,5 @@
   height: var(--dimensions);
   width: var(--dimensions);
   margin-right: 1.5rem;
-}
-
-.task .favourite {
-  --dimensions: 31px;
-  height: var(--dimensions);
-  width: var(--dimensions);
-  margin-right: 1.5rem;
-}
-
-.task .name-timestamp-wrapper {
-  white-space: pre;
-  overflow: hidden;
-  width: calc(100% - 2rem);
-}
-
-.task svg {
-  transition: all 0.5s;
-  stroke:1px solid black;
-}
-
-.task .name {
-  font-size: 1.6rem;
-  margin-bottom: 0.25rem;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-.task .timestamp {
-  font-size: 1.2rem;
-  color: #747474;
+  margin-left: 1.5rem;
 }

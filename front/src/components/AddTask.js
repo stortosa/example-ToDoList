@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import Task from './Task';
+import Error from './Error';
 import axios from 'axios';
 
 
@@ -9,19 +10,6 @@ class AddTask extends Component {
     done: false,
     error: false,
     allTasks: [],
-    count: null
-  };
-
-  increment = () => {
-    this.setState({
-      count: this.state.allTasks.length + 1
-    })
-  };
-
-  decrement = () => {
-    this.setState({
-      count: this.state.allTasks.length - 1
-    })
   };
 
   getAllTasks = () => {
@@ -45,7 +33,6 @@ class AddTask extends Component {
     if (description === '') {
       this.setState({
         error: true,
-        count: this.state.allTasks.length
       });
       //stop execution
       return;
@@ -61,12 +48,13 @@ class AddTask extends Component {
         this.setState({
           ...this.state,
           allTasks: cloneAllTasks,
+          description: '',
+          error: false
         });
       })
       .catch(error => console.log(error))
 
     this.getAllTasks();
-    this.increment();
   };
 
 
@@ -97,14 +85,14 @@ class AddTask extends Component {
             ...this.state,
           });
           console.log(chosenTask.done)
-
         } else {
           this.setState({
             done: false,
             ...this.state,
           })
-          console.log(chosenTask.done)
-        }
+          console.log(chosenTask.done);
+        };
+
 
         this.setState({
           ...this.state,
@@ -124,7 +112,6 @@ class AddTask extends Component {
         });
       });
     this.getAllTasks();
-    this.decrement();
     console.log(this.count)
 
   }
@@ -134,7 +121,6 @@ class AddTask extends Component {
       ...this.state,
     })
     this.getAllTasks();
-    this.count = this.state.allTasks.length;
   };
 
 
@@ -142,31 +128,34 @@ class AddTask extends Component {
 
     const { error } = this.state;
     const { allTasks } = this.state;
-    const { count } = this.state;
 
     return (
       <Fragment>
-        <div>
-          {error ? <div>campo obligatorio</div> : null}
-          <form onSubmit={this.handleSubmit}>
-            <p>
+        <div className="col-md-8 mx-auto">
+          {error ? <Error message="All fields are mandatory" /> : null}
+
+          <form className="mt-5" onSubmit={this.handleSubmit}>
+            <div className="form-group">
               <input
                 type="text"
                 placeholder="add a task"
+                className="form-control"
                 value={this.state.description}
                 name="description"
                 onChange={this.handleChange}
               />
-            </p>
+            </div>
             <input
               type="submit"
+              className="font-weight-bold text-uppercase mt-5 btn btn-primary btn-lg py-3"
               value="Add Task"
-              onClick={this.handleSubmit && this.increment}
+              onClick={this.handleSubmit}
             />
           </form>
         </div>
-        <h3>Task to do: {count}</h3>
-        <ul>
+        <h3 className="text-center">Tasks to do: {allTasks.length}</h3>
+        <h3 className="text-center">Remaining Tasks: {this.state.allTasks.filter(task => !task.done).length}</h3>
+        <ul className="list-group mt-5">
           {allTasks.map((task, idx) => (
             <Task
               key={idx}

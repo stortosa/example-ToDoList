@@ -17,10 +17,9 @@ class Task extends Component {
 
   render() {
     // console.log(this.props.task.done) 
-
     return (
-      <div className="task">
-        <li>Description:{this.props.task.description}
+      <div className="list-group-item d-flex justify-content-center align-items-center table-dark">
+        <li className="task">{this.props.task.description}
           {
             this.props.task.done
               ?
@@ -31,6 +30,7 @@ class Task extends Component {
           <div>
             <button
               type="button"
+              className="btn btn-danger"
               onClick={this.props.onDelete}
             >Delete&times;</button>
           </div>
