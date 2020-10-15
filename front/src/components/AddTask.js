@@ -10,6 +10,8 @@ class AddTask extends Component {
     done: false,
     error: false,
     allTasks: [],
+    allTimes: [],
+
   };
 
   getAllTasks = () => {
@@ -19,7 +21,7 @@ class AddTask extends Component {
         console.log(response.data.tasks)
         this.setState({
           ...this.state,
-          allTasks: response.data.tasks
+          allTasks: response.data.tasks,
         })
       })
   };
@@ -112,8 +114,6 @@ class AddTask extends Component {
         });
       });
     this.getAllTasks();
-    console.log(this.count)
-
   }
 
   componentDidMount() {

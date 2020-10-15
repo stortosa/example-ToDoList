@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 router.get('/', (req, res, next) => {
   Task.find()
-    .select('description _id done')
+    .select('description _id done createdAt')
     .populate('task', 'description')
     .exec()
     .then(docs => {
@@ -16,6 +16,7 @@ router.get('/', (req, res, next) => {
             description: doc.description,
             done: doc.done,
             _id: doc._id,
+            createdAt: doc.createdAt,
             request: {
               type: 'GET',
               url: 'http://localhost:4000/tasks/' + doc._id
@@ -37,7 +38,8 @@ router.post('/', (req, res, next) => {
   const task = new Task({
     _id: new mongoose.Types.ObjectId(),
     description: req.body.description,
-    done: req.body.done
+    done: req.body.done,
+    timestamps: new Date()
   });
   task
     .save()
@@ -48,6 +50,7 @@ router.post('/', (req, res, next) => {
         createdTask: {
           description: result.description,
           done: result.done,
+          createdAt: result.createdAt,
           _id: result._id,
           request: {
             type: 'POST',

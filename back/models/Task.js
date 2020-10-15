@@ -6,10 +6,11 @@ const taskSchema = mongoose.Schema({
   done: { type: Boolean, default: false },
 },
   {
-    timestamps: {
-      createdAt: 'created_at',
-      updatedAt: 'updated_at'
-    }
+    timestamps: Date
+    // {
+    //   createdAt: 'created_at',
+    //   updatedAt: 'updated_at'
+    // }
   }
 );
 module.exports = mongoose.model('Task', taskSchema);

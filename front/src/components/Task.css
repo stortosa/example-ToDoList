@@ -1,9 +1,14 @@
+.container {
+  /* display: flex; */
+  width: 500px;
+}
+
 .task {
   display: flex;
   padding: 1rem;
   border-radius: 1rem;
   background: linear-gradient(#fff, #e6e4ea);
-  color: #40403f;
+  color: #5e5e55;
   align-items: center;
   overflow: hidden;
 }
@@ -15,4 +20,7 @@
   width: var(--dimensions);
   margin-right: 1.5rem;
   margin-left: 1.5rem;
+}
+.task .date{
+  padding-right: 15px;
 }
