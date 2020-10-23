@@ -1,2 +1,5 @@
 # Environment Variables should NEVER be published
 .env
+/node_modules
+/.pnp
+.pnp.js
