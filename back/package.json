@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "TodoList Example",
   "main": "index.js",
+  "engines":{
+    "node": "12.19.0",
+    "npm":"6.14.8"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon back server"
