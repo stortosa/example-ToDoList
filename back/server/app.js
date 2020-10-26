@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors({
   credentials: true,
-  origin: ['http://localhost:3000']
+  origin: ['http://localhost:3000', 'https://todolist-react-example.herokuapp.com']
 }));
 
 app.use((req, res, next) => {
@@ -35,6 +35,7 @@ app.use((req, res, next) => {
   }
   next();
 })
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes which should handle requests:
 app.use('/tasks', taskRoutes);
