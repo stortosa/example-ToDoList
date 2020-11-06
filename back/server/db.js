@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
+// import variable from local enviorement:
+require('dotenv').config({path: 'variables.env'});
 
 mongoose.connect(
-  `mongodb+srv://goalUser:${process.env.MONGO_ATLAS_PW}@goals-app-p9rxi.mongodb.net/todolist?retryWrites=true&w=majority`,
+  process.env.DB_URL,
   {  
+    // `mongodb+srv://goalUser:${process.env.MONGO_ATLAS_PW}@goals-app-p9rxi.mongodb.net/todolist?retryWrites=true&w=majority`
     //mongodb+srv://<username>:<password>@goals-app.p9rxi.mongodb.net/<dbname>?retryWrites=true&w=majority
     // mongodb+srv://<username>:<password>@goals-app-p9rxi.mongodb.net/<dbname>?retryWrites=true&w=majority
     // useMongoClient: true,

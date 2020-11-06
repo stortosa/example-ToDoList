@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors({
   credentials: true,
-  origin: ['http://localhost:3000', 'https://todolist-react-example.herokuapp.com']
+  origin: ['http://localhost:3000']
 }));
 
 app.use((req, res, next) => {
