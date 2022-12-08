@@ -20,11 +20,11 @@
   "homepage": "https://github.com/stortosa/example-ToDoList#readme",
   "dependencies": {
     "axios": "^0.19.2",
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.1",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "mongoose": "^5.9.26",
     "morgan": "^1.10.0",
     "path": "^0.12.7",
